@@ -1,0 +1,70 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define F(i, L, R) for (int i = L; i < R; i++)
+
+class step{
+  public:
+  int x,y;
+  int dis;
+  step(int x,int y,int dis){
+    this->x = x;
+    this->y = y;
+    this->dis = dis;
+  }
+};
+
+bool isValid(int x,int y,int N){
+  if(x>=1 && x<=N && y>=1 && y<=N)
+    return true;
+  return false;
+}
+
+int minKnightSteps(int startC[], int targetC[],int N){
+  vector <vector <bool> > visit(N+1,vector <bool> (N+1,false));
+  int x, y;
+  int dx[] = {-2,-1,1,2,-2,-1,1,2};
+  int dy[] = {-1,-2,-2,-1,1,2,2,1};
+
+  step s1(startC[0],startC[1],0);
+
+  visit[startC[0]][startC[1]]=true;
+
+  queue <step> q1;
+  q1.push(s1);
+
+  while(!q1.empty()){
+    step s2 = q1.front();
+    q1.pop();
+
+    if(s2.x==targetC[0] && s2.y == targetC[1])
+      return s2.dis;
+
+    for(int i=0;i<8;i++){
+      x = s2.x + dx[i];
+      y = s2.y + dy[i];
+
+      if(isValid(x,y,N) && !visit[x][y]){
+        visit[x][y]=true;
+        q1.push(step(x,y,s2.dis+1));
+      }
+    }
+  }
+  return -1;
+}
+
+int main(){
+  int n;
+  cin>>n;
+  int startC[2],targetC[2];
+
+  for(int i=0;i<2;i++)
+    cin>>startC[i];
+
+  for(int i=0;i<2;i++)
+    cin>>targetC[i];
+
+
+  cout << minKnightSteps(startC,targetC,n) << endl;
+
+  return 0;
+}
