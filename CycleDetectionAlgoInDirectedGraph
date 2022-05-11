@@ -15,7 +15,11 @@ bool cycleDetector(vector <int> adj[],vector <bool> &visited,vector <bool> &Stac
     else if(Stack[it])
       return true;
   }
-  //If no cycle is found mark the cur vertex as unvisited in our stack.
+  /*
+  If no cycle is found mark the cur vertex as unvisited in our stack.
+  we are doing so bcz we are passing both the visited and recStack as refernece 
+  our code will work for most of the cases if we pass them by value and skip that below one step.
+  */
   Stack[cur]=false;
   return false;
 }
