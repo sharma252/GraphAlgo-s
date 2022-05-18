@@ -1,0 +1,69 @@
+//Dijkstra Algorithm:
+#include<bits/stdc++.h>
+using namespace std;
+#define F(i,L,R) for (int i = L; i < R; i++)
+
+//To find the minimum distance vertex, intially source vertex with distance 0.
+int searchMin(vector<int> &dist,vector<bool> &visited,int n){
+  int idx,minD = INT_MAX;
+
+  for(int i=0;i<n;i++){
+    if(!visited[i] && minD>dist[i]){
+      idx = i;
+      minD=dist[i];
+    }
+  }
+  return idx;
+}
+
+//Algo Implementation:
+void dijkstra(vector<vector<int>> graph,int n){
+  //Three arrays:
+  // One for visited vertex, one for parent of current vertex(help in structuring the ans) and one is for sitance of vertices.
+  vector<bool> visited(n,false);
+  vector<int> parent(n);
+  vector<int> dist(n,INT_MAX);
+
+  //Intially source vertex distance is zero and its parent is -1.
+  dist[0]=0;
+  parent[0]=-1;
+
+  //To find the minimum vertex, size -1 bcz dont need to find for last vertex.
+  for(int i=0;i<n-1;i++){
+    int minV = searchMin(dist,visited,n);
+    //Mark selected vertex as mark.
+    visited[minV] = true;
+    for(int j=0;j<n;j++){
+      /*
+        Three main condition:
+        1. A edge must be present b/w minVErtex and cur 
+        2. cur vertex must be unvisited.
+        3. minVertex distance must be calculated beforehand. 
+      */
+      if( !visited[j] && graph[minV][j]!=0 &&  dist[minV]!=INT_MAX && (dist[minV]+graph[minV][j]<dist[j])){
+        dist[j] = dist[minV]+graph[minV][j];
+        parent[j] = minV;
+      }
+    }
+  }
+
+    for(int i=1;i<n;i++)
+      cout<<parent[i]<<"->"<<i<<" : "<<graph[parent[i]][i]<<endl;
+}
+
+int main(){
+  int n;
+  cin>>n;
+
+  vector<vector<int>> graph(n,vector<int>(n));
+
+  for(int i=0;i<n;i++){
+    for(int j=0;j<n;j++){
+      cin>>graph[i][j];
+    }
+  }
+
+  dijkstra(graph,n);
+
+  return 0;
+}
