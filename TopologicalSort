@@ -1,4 +1,6 @@
-//Topological Sort:
+//Topological Sort: A little variation of Cycle detection in directed graph.
+//Here we are using the stack to print elements in that order where
+//in cycle detection we use stack to identify cycle.
 #include<bits/stdc++.h>
 using namespace std;
 #define F(i,L,R) for (int i = L; i < R; i++)
