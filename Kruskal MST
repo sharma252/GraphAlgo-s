@@ -7,6 +7,7 @@ struct node{
     int rank;
 };
 
+// For our Graph edge.
 struct edge{
     int src;
     int dest;
@@ -14,8 +15,10 @@ struct edge{
 };
 
 vector<node> disJoint;
+//The final MST.
 vector<edge> mst;
 
+//The below two functions are explained in Disjoint Set DS.
 int find(int child){
     if (disJoint[child].parent == -1)
         return child;
@@ -39,10 +42,12 @@ void unionOp(int fromP, int toP){
     }
 }
 
+//Sort on the basis of weight.
 bool compare(edge e1, edge e2){
     return e1.weight < e2.weight;
 }
 
+//To print final MST.
 void printMST(){
     sort(mst.begin(), mst.end(), compare);
     for (auto it : mst)
@@ -51,9 +56,13 @@ void printMST(){
 
 void kruskalMST(vector<edge> graph, int n, int e){
     int from, to;
+    //Sort the given graph on the basis of minimum weight.
     sort(graph.begin(), graph.end(), compare);
     int i = 0, j = 0;
 
+    //Two pointer i and j :
+    //i for just pushinh n-1 edges in final MST and
+    //j to traverse all vertices.
     while (i < n - 1 && j < e){
         from = find(graph[j].src);
         to = find(graph[j].dest);
@@ -64,10 +73,12 @@ void kruskalMST(vector<edge> graph, int n, int e){
         }
 
         unionOp(from, to);
+        //Push the vertex in graph.
         mst.push_back(graph[j]);
         i++;
         j++;
     }
+    //Print the mst.
     printMST();
 }
 
