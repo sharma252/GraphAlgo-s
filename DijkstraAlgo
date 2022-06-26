@@ -4,7 +4,7 @@ using namespace std;
 #define F(i,L,R) for (int i = L; i < R; i++)
 
 //To find the minimum distance vertex, intially source vertex with distance 0.
-int searchMin(vector<int> &dist,vector<bool> &visited,int n){
+int findMin(vector<int> &dist,vector<bool> &visited,int n){
   int idx,minD = INT_MAX;
 
   for(int i=0;i<n;i++){
@@ -18,37 +18,43 @@ int searchMin(vector<int> &dist,vector<bool> &visited,int n){
 
 //Algo Implementation:
 void dijkstra(vector<vector<int>> graph,int n){
-  //Three arrays:
-  // One for visited vertex, one for parent of current vertex(help in structuring the ans) and one is for sitance of vertices.
-  vector<bool> visited(n,false);
-  vector<int> parent(n);
-  vector<int> dist(n,INT_MAX);
+   /*
+        Cycle : visited array
+        distance : dist array
+        parent : parent array
+    */
 
-  //Intially source vertex distance is zero and its parent is -1.
-  dist[0]=0;
-  parent[0]=-1;
+    vector<bool> visited(n,false);
+    vector<int> dist(n,INT_MAX);
+    vector<int> parent(n);
 
-  //To find the minimum vertex, size -1 bcz dont need to find for last vertex.
-  for(int i=0;i<n-1;i++){
-    int minV = searchMin(dist,visited,n);
-    //Mark selected vertex as mark.
-    visited[minV] = true;
-    for(int j=0;j<n;j++){
-      /*
-        Three main condition:
-        1. A edge must be present b/w minVErtex and cur 
-        2. cur vertex must be unvisited.
-        3. minVertex distance must be calculated beforehand. 
-      */
-      if( !visited[j] && graph[minV][j]!=0 &&  dist[minV]!=INT_MAX && (dist[minV]+graph[minV][j]<dist[j])){
-        dist[j] = dist[minV]+graph[minV][j];
-        parent[j] = minV;
-      }
+    dist[0]=0;
+    parent[0]=-1;
+
+    /*
+        Find minVertex in given graph:
+            Choose all the adjacent node to that minVertex
+                1.) Adjacent node must not be visited.
+                2.) distance of minVertex must be calculated before hand.(DP arrpoach)
+                3.) distance of adjacent vertex must be less than the distance of minVertex + weight of minVertex to adjacent node.
+                    If satisfied update otherwise
+                    move forward.
+    */
+
+    for(int i=0;i<n-1;i++){
+        int minVertex = findMin(dist,visited,n);
+        visited[minVertex] = true;
+
+        for(int j=0;j<n;j++){
+            if(!visited[j] && dist[minVertex]!=INT_MAX && graph[minVertex][j]>0 && dist[j] > dist[minVertex] + graph[minVertex][j]){
+                dist[j] = dist[minVertex] + graph[minVertex][j];
+                parent[j] = minVertex;
+            }
+        }
     }
-  }
 
     for(int i=1;i<n;i++)
-      cout<<parent[i]<<"->"<<i<<" : "<<graph[parent[i]][i]<<endl;
+        cout<<parent[i]<<"->"<<i<<" : "<<dist[i]<<endl;
 }
 
 int main(){
